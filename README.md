@@ -4,6 +4,7 @@ A cute **interactive web page** that asks "Do you love me?" and responds with **
 Built with **HTML, CSS, and JavaScript**, featuring **voice-free interactions**, **theme toggle**, and **screenshot sharing**.
 
 > 🎀 This project is meant for fun and demonstration purposes.
+<img width="1286" height="610" alt="image" src="https://github.com/user-attachments/assets/18ec2f9d-1373-44bb-b16e-7a2179157932" />
 
 ---
 
