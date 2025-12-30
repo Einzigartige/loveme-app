@@ -247,6 +247,10 @@ body {
   transition: transform 0.25s ease;
 }
 
+.popup-actions button:first-child {
+  margin-bottom: 5px;
+}
+
 .popup-actions button:hover {
   transform: scale(1.1);
 }

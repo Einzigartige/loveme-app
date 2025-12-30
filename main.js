@@ -24,9 +24,66 @@ const themeBtn = document.getElementById("theme");
 /* =========================
    STATE
 ========================= */
+// Default preference: true if not set previously
+const savedPref = localStorage.getItem("musicOn");
+let musicOn = savedPref === null ? true : JSON.parse(savedPref);
 let step = 0;
-let musicOn = false;
 let heartsStarted = false;
+let firstClickDone = false;
+
+/* =========================
+   UPDATE MUSIC BUTTON ICON
+========================= */
+function updateMusicIcon() {
+  musicBtn.innerText = music.paused ? "🔊" : "🔈";
+}
+
+/* =========================
+   PLAY MUSIC WITH ERROR HANDLING
+========================= */
+function playMusic() {
+  music.play().then(() => {
+    musicOn = true;
+    localStorage.setItem("musicOn", "true");
+    updateMusicIcon();
+  }).catch(err => {
+    console.log("Music blocked:", err);
+    musicOn = false;
+    updateMusicIcon();
+  });
+}
+
+/* =========================
+   PAUSE MUSIC
+========================= */
+function pauseMusic() {
+  music.pause();
+  musicOn = false;
+  localStorage.setItem("musicOn", "false");
+  updateMusicIcon();
+}
+
+/* =========================
+   INITIAL MUSIC ON LOAD
+========================= */
+window.addEventListener("load", () => {
+  if (musicOn) {
+    playMusic();
+  } else {
+    pauseMusic();
+  }
+});
+
+/* =========================
+   MUSIC TOGGLE
+========================= */
+musicBtn.addEventListener("click", () => {
+  if (music.paused) {
+    playMusic();
+  } else {
+    pauseMusic();
+  }
+});
 
 /* =========================
    NO BUTTON STEPS
@@ -41,9 +98,6 @@ const stepsData = [
   { text: "Last chance ❤️", image: "assets/loveme.gif" }
 ];
 
-/* =========================
-   NO BUTTON LOGIC
-========================= */
 noBtn.addEventListener("click", () => {
   if (step < stepsData.length) {
     text.innerText = stepsData[step].text;
@@ -80,10 +134,8 @@ function acceptLove() {
 
   confettiBurst();
 
-  if (!musicOn) {
-    music.play();
-    musicOn = true;
-    musicBtn.innerText = "🔈";
+  if (music.paused) {
+    playMusic();
   }
 
   if (!heartsStarted) {
@@ -108,21 +160,7 @@ cover.addEventListener("click", () => {
 closePopup.addEventListener("click", () => {
   popup.style.display = "none";
   awwSound.currentTime = 0;
-  awwSound.play();
-});
-
-/* =========================
-   MUSIC TOGGLE
-========================= */
-musicBtn.addEventListener("click", () => {
-  if (musicOn) {
-    music.pause();
-    musicBtn.innerText = "🔊";
-  } else {
-    music.play();
-    musicBtn.innerText = "🔈";
-  }
-  musicOn = !musicOn;
+  awwSound.play().catch(err => console.log("aww sound error:", err));
 });
 
 /* =========================
